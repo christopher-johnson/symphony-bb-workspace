@@ -33,7 +33,7 @@
 			<xsl:apply-templates select="data/navigation"/>
 		</div>
 		<div id="package">
-			<p class="date">
+			<p class="sdate">
 				<xsl:call-template name="format-date">
 					<xsl:with-param name="date" select="$today"/>
 					<xsl:with-param name="format" select="'d'"/>
@@ -50,8 +50,8 @@
 			</div>
 		</div>
 		<ul id="footer">
-			<li>Orchestrated by <a class="symphony" href="http://getsymphony.com/">Symphony</a></li>
-			<li>Broadcasted via <a class="rss" href="{$root}/rss/">XML Feed</a></li>
+			<li>Developed by <a class="symphony" href="http://erbeinformatik.org/">Christopher Johnson</a></li>
+			<li><a class="rss" href="http://www.blumenbach-online.de/">Akademie der Wissenschaften zu Göttingen</a></li>
 		</ul>
 	</body>
 </html>
