@@ -35,9 +35,7 @@
                 </div>
                 <div id="package">
                     <div id="content">
-                        <xsl:call-template name="nl2br">
-                            <xsl:with-param name="string" select="data/briefregesten-title"/>
-                        </xsl:call-template>
+                    <xsl:apply-templates select="data/briefregesten-addressee" />
                     </div>
                 </div>
                 <ul id="footer">
@@ -49,10 +47,10 @@
 
     </xsl:template>
 
-    <xsl:template match="data/briefregesten/persName">
+    <xsl:template match="persName">
         <TR>
             <TD STYLE="font-size:12pt font-family:serif">
-            <xsl:apply-templates select="data/briefregesten/persName" />
+                <xsl:apply-templates select="/data/briefregesten-addressee" />
             </TD>
         </TR>
     </xsl:template>

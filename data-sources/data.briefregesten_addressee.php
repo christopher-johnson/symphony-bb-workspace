@@ -2,10 +2,10 @@
 
 require_once(EXTENSIONS . '/remote_datasource/data-sources/datasource.remote.php');
 
-class datasourcebriefregesten_title extends RemoteDatasource {
+class datasourcebriefregesten_addressee extends RemoteDatasource {
 
-    public $dsParamROOTELEMENT = 'briefregesten';
-    public $dsParamURL = 'http://localhost:8088/rest/db/apps/blumenbach/data/titles.xql';
+    public $dsParamROOTELEMENT = 'briefregesten-addressee';
+    public $dsParamURL = 'http://localhost:8088/rest/db/apps/blumenbach/data/addressee.xql';
     public $dsParamFORMAT = 'xml';
     public $dsParamXPATH = '/*';
     public $dsParamCACHE = 5;
@@ -20,13 +20,13 @@ class datasourcebriefregesten_title extends RemoteDatasource {
     public function about()
     {
         return array(
-            'name' => 'Briefregesten Title',
+            'name' => 'Briefregesten Addressee',
             'author' => array(
                 'name' => 'Christopher Johnson',
                 'website' => 'http://localhost',
                 'email' => 'christopher.johnson@wikimedia.de'),
             'version' => 'Symphony 2.5.2',
-            'release-date' => '2014-12-07T21:39:24+00:00'
+            'release-date' => '2014-12-08T15:35:47+00:00'
         );
     }
 
