@@ -19,11 +19,11 @@
             <fo:simple-page-master master-name="A4" page-width="210mm"
                                    page-height="297mm" margin-top="1cm" margin-bottom="1cm"
                                    margin-left="1cm" margin-right="1cm">
-                <fo:region-body margin="3cm"/>
-                <fo:region-before extent="2cm"/>
-                <fo:region-after extent="2cm"/>
-                <fo:region-start extent="2cm"/>
-                <fo:region-end extent="2cm"/>
+                <fo:region-body margin="1cm"/>
+                <fo:region-before extent="1cm"/>
+                <fo:region-after extent="1cm"/>
+                <fo:region-start extent="1cm"/>
+                <fo:region-end extent="1cm"/>
             </fo:simple-page-master>
         </fo:layout-master-set>
              <fo:page-sequence master-reference="A4">
@@ -70,7 +70,7 @@
                                     <fo:block font-weight="bold">TEI Element</fo:block>
                                 </fo:table-cell>
                                 <fo:table-cell>
-                                    <fo:block font-weight="bold">TEI Element</fo:block>
+                                    <fo:block font-weight="bold"></fo:block>
                                 </fo:table-cell>
                                 <fo:table-cell>
                                     <fo:block font-weight="bold">Value</fo:block>
@@ -179,13 +179,31 @@
             </fo:table-row>
         </xsl:if>
         <xsl:if test="./t:notesStmt/t:note/* != ''">
+            <fo:table-row>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td1">
+                    <fo:block>
+                        Notes
+                    </fo:block>
+                </fo:table-cell>
+                <xsl:if test="./t:notesStmt/t:note/t:rs[@type='object'] != ''">
+                    <fo:table-cell xsl:use-attribute-sets="table.data.td2">
+                        <fo:block>
+                            Obj:
+                        </fo:block>
+                    </fo:table-cell>
+                    <fo:table-cell xsl:use-attribute-sets="table.data.td3">
+                        <fo:block>
+                            <xsl:value-of select="./t:notesStmt/t:note/t:rs[@type='object']"/>
+                        </fo:block>
+                    </fo:table-cell>
+                </xsl:if>
+            </fo:table-row>
+        </xsl:if>
+        <xsl:if test="./t:notesStmt/t:note/t:rs[@type='bibl'] != ''">
         <fo:table-row>
             <fo:table-cell xsl:use-attribute-sets="table.data.td1">
-             <fo:block>
-            Notes
-            </fo:block>
+             <fo:block></fo:block>
             </fo:table-cell>
-          <xsl:if test="./t:notesStmt/t:note/t:rs[@type='bibl'] != ''">
             <fo:table-cell xsl:use-attribute-sets="table.data.td2">
                   <fo:block>
                     Bibl:
@@ -196,10 +214,9 @@
                     <xsl:value-of select="./t:notesStmt/t:note/t:rs[@type='bibl']"/>
                 </fo:block>
             </fo:table-cell>
-          </xsl:if>
-                </fo:table-row>
-           </xsl:if>
-          <xsl:if test="./t:notesStmt/t:note/t:ref/@target != ''">
+             </fo:table-row>
+        </xsl:if>
+           <xsl:if test="./t:notesStmt/t:note/t:ref/@target != ''">
             <fo:table-row>
                 <fo:table-cell xsl:use-attribute-sets="table.data.td1">
                     <fo:block></fo:block>
@@ -233,7 +250,7 @@
             </fo:table-cell>
             </fo:table-row>
         </xsl:if>
-        <xsl:if test="./t:sourceStmt/t:biblFull/t:titleStmt/t:title != ''">
+        <xsl:if test="./t:sourceDesc/t:biblFull/t:titleStmt/t:title != ''">
             <fo:table-row>
                 <fo:table-cell xsl:use-attribute-sets="table.data.td1">
                     <fo:block>
@@ -247,7 +264,7 @@
                 </fo:table-cell>
                 <fo:table-cell xsl:use-attribute-sets="table.data.td3">
                     <fo:block>
-                        <xsl:value-of select="./t:sourceStmt/t:biblFull/t:titleStmt/t:title"/>
+                        <xsl:value-of select="./t:sourceDesc/t:biblFull/t:titleStmt/t:title"/>
                     </fo:block>
                 </fo:table-cell>
             </fo:table-row>
@@ -287,22 +304,13 @@
                 </fo:block>
             </fo:table-cell>
             </fo:table-row>
-        </xsl:if>
         <fo:table-row>
-            <fo:table-cell xsl:use-attribute-sets="table.data.td1">
-                <fo:block></fo:block>
-            </fo:table-cell>
-            <fo:table-cell xsl:use-attribute-sets="table.data.td2">
-                <fo:block></fo:block>
-            </fo:table-cell>
-            <fo:table-cell xsl:use-attribute-sets="table.data.td3">
-                <fo:block></fo:block>
+            <fo:table-cell>
+                <fo:block><fo:leader /></fo:block>
             </fo:table-cell>
         </fo:table-row>
-    </xsl:template>
-
-
-
+        </xsl:if>
+        </xsl:template>
 </xsl:stylesheet>
 
 
