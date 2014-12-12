@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:t="http://www.tei-c.org/ns/1.0"
+                xmlns ="http://www.w3.org/1999/xhtml">
 
 <xsl:import href="page-title.xsl"/>
 <xsl:import href="navigation.xsl"/>
@@ -33,18 +35,6 @@
 			<xsl:apply-templates select="data/navigation"/>
 		</div>
 		<div id="package">
-			<p class="sdate">
-				<xsl:call-template name="format-date">
-					<xsl:with-param name="date" select="$today"/>
-					<xsl:with-param name="format" select="'d'"/>
-				</xsl:call-template>
-				<span>
-					<xsl:call-template name="format-date">
-						<xsl:with-param name="date" select="$today"/>
-						<xsl:with-param name="format" select="'m'"/>
-					</xsl:call-template>
-				</span>
-			</p>
 			<div id="content">
 				<xsl:apply-templates/>
 			</div>

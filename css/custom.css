@@ -1,0 +1,27 @@
+/******* Structure *******/
+
+body {
+    color: #222;
+    background: #333;
+	margin: 2em 0;
+}
+
+/******* Menu *******/
+
+ul#menu {
+	position: absolute;
+	right: 0;
+	top: 0.4em;
+	margin: 0;
+}
+
+#package {
+    position: relative;
+    background: #fff;
+    width: 80%;
+    text-align: left;
+    border: 5px solid #282828;
+    margin: 0 auto;
+}
+
+

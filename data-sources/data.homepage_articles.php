@@ -16,6 +16,7 @@ class datasourcehomepage_articles extends SectionDatasource
         'system:id'
         );
     public $dsParamSORT = 'system:id';
+    public $dsParamHTMLENCODE = 'no';
     public $dsParamASSOCIATEDENTRYCOUNTS = 'yes';
 
     public $dsParamFILTERS = array(
@@ -40,11 +41,11 @@ class datasourcehomepage_articles extends SectionDatasource
         return array(
             'name' => 'Homepage Articles',
             'author' => array(
-                'name' => 'Symphony Team',
-                'website' => 'http://getsymphony.com',
-                'email' => 'team@getsymphony.com'),
-            'version' => 'Symphony 2.5.0',
-            'release-date' => '2014-09-15T10:29:11+00:00'
+                'name' => 'Christopher Johnson',
+                'website' => 'http://localhost',
+                'email' => 'christopher.johnson@wikimedia.de'),
+            'version' => 'Symphony 2.5.2',
+            'release-date' => '2014-12-11T16:06:03+00:00'
         );
     }
 

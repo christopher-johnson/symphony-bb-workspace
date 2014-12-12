@@ -23,13 +23,6 @@
 			<li class="icon-filed-under">
 				<xsl:apply-templates select="categories/item"/>
 			</li>
-			<li class="icon-comments">
-				<a href="{$root}/articles/{title/@handle}/#comments">
-					<xsl:text>Comments (</xsl:text>
-					<xsl:value-of select="@comments"/>
-					<xsl:text>)</xsl:text>
-				</a>
-			</li>
 		</ul>
 		<xsl:apply-templates select="body/*[position() &lt;= 2]" mode="html"/>
 		<xsl:call-template name="get-images">

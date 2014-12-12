@@ -1,116 +1,308 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:t="http://www.tei-c.org/ns/1.0"
-                xmlns ="http://www.w3.org/1999/xhtml">
+                xmlns:fo="http://www.w3.org/1999/XSL/Format"
+                xmlns:axsl="http://www.w3.org/1999/XSL/TransformAlias">
 
-<xsl:import href="../utilities/page-title.xsl"/>
-<xsl:import href="../utilities/navigation.xsl"/>
-<xsl:import href="../utilities/date-time.xsl"/>
-<xsl:import href="../utilities/nl2br.xsl"/>
+    <xsl:import href="../utilities/page-title.xsl"/>
+    <xsl:import href="../utilities/navigation.xsl"/>
+    <xsl:import href="../utilities/attributes.xsl"/>
 
-<xsl:output method="xml"
-            doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"
-            doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
-            omit-xml-declaration="yes"
-            encoding="UTF-8"
-            indent="yes" />
+<xsl:namespace-alias stylesheet-prefix="axsl" result-prefix="xsl"/>
+
 
 <xsl:variable name="is-logged-in" select="/data/logged-in-author/author"/>
 
-<xsl:template match="text()" />
-<xsl:template match="/">
+    <xsl:template match="/">
+    <fo:root>
+        <fo:layout-master-set>
+            <fo:simple-page-master master-name="A4" page-width="210mm"
+                                   page-height="297mm" margin-top="1cm" margin-bottom="1cm"
+                                   margin-left="1cm" margin-right="1cm">
+                <fo:region-body margin="3cm"/>
+                <fo:region-before extent="2cm"/>
+                <fo:region-after extent="2cm"/>
+                <fo:region-start extent="2cm"/>
+                <fo:region-end extent="2cm"/>
+            </fo:simple-page-master>
+        </fo:layout-master-set>
+             <fo:page-sequence master-reference="A4">
+               <fo:static-content flow-name="xsl-region-before">
+                   <fo:block xsl:use-attribute-sets="h4"> Blumenbach TEI Datenbank: Briefregesten</fo:block>
+               </fo:static-content>
+                 <fo:static-content flow-name="xsl-region-after">
+                     <fo:list-block>
+                         <fo:list-item>
+                             <fo:list-item-label>
+                                 <fo:block></fo:block>
+                             </fo:list-item-label>
+                             <fo:list-item-body>
+                                 <fo:block>
+                                     Generated: <xsl:value-of select="$today"/>
+                                 </fo:block>
+                             </fo:list-item-body>
+                         </fo:list-item>
+                         <fo:list-item>
+                             <fo:list-item-label>
+                                 <fo:block></fo:block>
+                             </fo:list-item-label>
+                             <fo:list-item-body>
+                                 <fo:block>
 
-<html>
-      <head>
-            <title>
-                <xsl:call-template name="page-title">
+                                 </fo:block>
+                             </fo:list-item-body>
+                         </fo:list-item>
+                     </fo:list-block>
+                 </fo:static-content>
+                   <fo:flow flow-name="xsl-region-body">
+                       <fo:block xsl:use-attribute-sets="h4">
+                           <a href="{$root}"><xsl:value-of select="$website-name"/></a>
+                           <xsl:apply-templates select="data/navigation"/>
+                       </fo:block>
+                   <fo:table xsl:use-attribute-sets="table.data">
+                        <fo:table-column column-width="15%" column-number="1"/>
+                        <fo:table-column column-width="15%" column-number="2"/>
+                        <fo:table-column column-width="70%" column-number="3"/>
 
-                </xsl:call-template>
-            </title>
-             <link rel="icon" type="images/png" href="{$workspace}/images/icons/bookmark.png" />
-             <link rel="stylesheet" type="text/css" media="screen" href="{$workspace}/css/styles.css" />
-             <link rel="alternate" type="application/rss+xml" href="{$root}/rss/" />
-       </head>
-       <body>
-              <div id="masthead">
-                    <h1>
-                        <a href="{$root}"><xsl:value-of select="$website-name"/></a>
-                    </h1>
-                    <xsl:apply-templates select="data/navigation">
+                        <fo:table-header xsl:use-attribute-sets="table.data.th">
+                            <fo:table-row>
+                                <fo:table-cell>
+                                    <fo:block font-weight="bold">TEI Element</fo:block>
+                                </fo:table-cell>
+                                <fo:table-cell>
+                                    <fo:block font-weight="bold">TEI Element</fo:block>
+                                </fo:table-cell>
+                                <fo:table-cell>
+                                    <fo:block font-weight="bold">Value</fo:block>
+                                </fo:table-cell>
+                            </fo:table-row>
+                        </fo:table-header>
 
-                    </xsl:apply-templates>
-              </div>
+                        <fo:table-body start-indent="0pt" text-align="start">
+                           <xsl:apply-templates mode="brdata" select="//*[name()='teiHeader']/node()"/>
+                        </fo:table-body>
+                    </fo:table>
+                   </fo:flow>
+            </fo:page-sequence>
+ </fo:root>
+   </xsl:template>
 
-           <div id="package">
+    <xsl:template match="node()" mode="brdata" priority="2.5">
+            <xsl:if test="./t:publicationStmt/t:date != ''">
+        <fo:table-row>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td1">
+                <fo:block>
+                    File
+                </fo:block>
+            </fo:table-cell>
 
-            <div id="content">
-                  <table>
-                      <xsl:apply-templates mode="header" select="//*[name()='teiHeader']/node()"/>
-                   </table>
-              </div>
-           </div>
-              <ul id="footer">
-                    <li>Orchestrated by <a class="symphony" href="http://getsymphony.com/">Symphony</a></li>
-                    <li>Broadcasted via <a class="rss" href="{$root}/rss/">XML Feed</a></li>
-              </ul>
-       </body>
- </html>
-
-</xsl:template>
-
-    <xsl:template match="node()" mode="header" priority="2.5">
-        <xsl:if test="./t:publicationStmt/t:date">
-        <tr>
-            <td>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td2">
+                    <fo:block>
             Date:
-            </td>
-            <td>
+                    </fo:block>
+                </fo:table-cell>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td3">
+                <fo:block>
                  <xsl:value-of select="./t:publicationStmt/t:date"/>
-            </td>
-        </tr>
+                </fo:block>
+            </fo:table-cell>
+                </fo:table-row>
         </xsl:if>
-        <xsl:if test="./t:publicationStmt/t:pubPlace">
-            <tr>
-                <td>
+        <xsl:if test="./t:publicationStmt/t:pubPlace != ''">
+            <fo:table-row>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td1">
+                <fo:block></fo:block>
+            </fo:table-cell>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td2">
+                <fo:block>
                     Place:
-                </td>
-                <td>
+                </fo:block>
+            </fo:table-cell>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td3">
+                <fo:block>
                     <xsl:value-of select="./t:publicationStmt/t:pubPlace"/>
-                </td>
-            </tr>
+                </fo:block>
+            </fo:table-cell>
+            </fo:table-row>
         </xsl:if>
-        <xsl:if test="./t:titleStmt/t:author/t:persName">
-            <tr>
-                <td>
+        <xsl:if test="./t:titleStmt/t:author/t:persName != ''">
+            <fo:table-row>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td1">
+                <fo:block></fo:block>
+            </fo:table-cell>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td2">
+                <fo:block>
                     Author:
-                </td>
-                <td>
+                </fo:block>
+            </fo:table-cell>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td3">
+                <fo:block>
                     <xsl:value-of select="./t:titleStmt/t:author/t:persName"/>
-                </td>
-            </tr>
+                </fo:block>
+            </fo:table-cell>
+            </fo:table-row>
         </xsl:if>
-        <xsl:if test="./t:titleStmt/t:title">
-             <tr>
-                 <td>
+        <xsl:if test="./t:titleStmt/t:title != ''">
+            <fo:table-row>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td1">
+                <fo:block></fo:block>
+            </fo:table-cell>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td2">
+                <fo:block>
                     Title:
-                 </td>
-                 <td>
-                    <xsl:value-of select="./t:titleStmt/t:title"/>
-                 </td>
-             </tr>
+                </fo:block>
+            </fo:table-cell>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td3">
+                    <fo:block>
+                        <xsl:value-of select="./t:titleStmt/t:title"/>
+                    </fo:block>
+                </fo:table-cell>
+            </fo:table-row>
         </xsl:if>
-        <xsl:if test="./t:textClass/t:classCode[@scheme='RegNr']">
-            <tr>
-                <td>
+        <xsl:if test="./t:seriesStmt/t:biblScope != ''">
+            <fo:table-row>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td1">
+                <fo:block>
+                Series
+                </fo:block>
+            </fo:table-cell>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td2">
+                <fo:block>
+                    Bibl:
+                </fo:block>
+            </fo:table-cell>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td3">
+                <fo:block>
+                    <xsl:value-of select="./t:seriesStmt/t:biblScope"/>
+                </fo:block>
+            </fo:table-cell>
+            </fo:table-row>
+        </xsl:if>
+        <xsl:if test="./t:notesStmt/t:note/* != ''">
+        <fo:table-row>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td1">
+             <fo:block>
+            Notes
+            </fo:block>
+            </fo:table-cell>
+          <xsl:if test="./t:notesStmt/t:note/t:rs[@type='bibl'] != ''">
+            <fo:table-cell xsl:use-attribute-sets="table.data.td2">
+                  <fo:block>
+                    Bibl:
+                </fo:block>
+            </fo:table-cell>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td3">
+                <fo:block>
+                    <xsl:value-of select="./t:notesStmt/t:note/t:rs[@type='bibl']"/>
+                </fo:block>
+            </fo:table-cell>
+          </xsl:if>
+                </fo:table-row>
+           </xsl:if>
+          <xsl:if test="./t:notesStmt/t:note/t:ref/@target != ''">
+            <fo:table-row>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td1">
+                    <fo:block></fo:block>
+                </fo:table-cell>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td2">
+                <fo:block>
+                    Reference:
+                </fo:block>
+            </fo:table-cell>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td3">
+                <fo:block>
+                    <xsl:value-of select="./t:notesStmt/t:note/t:ref/@target"/>
+                </fo:block>
+            </fo:table-cell>
+            </fo:table-row>
+        </xsl:if>
+        <xsl:if test="./t:notesStmt/t:note/t:rs[@type='edition'] != ''">
+            <fo:table-row>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td1">
+                    <fo:block></fo:block>
+                </fo:table-cell>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td2">
+                <fo:block>
+                    Edition:
+                </fo:block>
+            </fo:table-cell>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td3">
+                <fo:block>
+                    <xsl:value-of select="./t:notesStmt/t:note/t:rs[@type='edition']"/>
+                </fo:block>
+            </fo:table-cell>
+            </fo:table-row>
+        </xsl:if>
+        <xsl:if test="./t:sourceStmt/t:biblFull/t:titleStmt/t:title != ''">
+            <fo:table-row>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td1">
+                    <fo:block>
+                        Source
+                    </fo:block>
+                </fo:table-cell>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td2">
+                    <fo:block>
+                        Title:
+                    </fo:block>
+                </fo:table-cell>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td3">
+                    <fo:block>
+                        <xsl:value-of select="./t:sourceStmt/t:biblFull/t:titleStmt/t:title"/>
+                    </fo:block>
+                </fo:table-cell>
+            </fo:table-row>
+        </xsl:if>
+        <xsl:if test="./t:creation/t:persName != ''">
+            <fo:table-row>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td1">
+                <fo:block>
+                    Profile
+                </fo:block>
+            </fo:table-cell>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td2">
+                <fo:block>
+                    Empfanger:
+                </fo:block>
+            </fo:table-cell>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td3">
+                <fo:block>
+                    <xsl:value-of select="./t:creation/t:persName"/>
+                </fo:block>
+            </fo:table-cell>
+            </fo:table-row>
+        </xsl:if>
+        <xsl:if test="./t:textClass/t:classCode[@scheme='RegNr'] != ''">
+            <fo:table-row>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td1">
+                    <fo:block></fo:block>
+                </fo:table-cell>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td2">
+                <fo:block>
                     RegNr:
-                </td>
-                <td>
+                </fo:block>
+            </fo:table-cell>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td3">
+                <fo:block>
                     <xsl:value-of select="./t:textClass/t:classCode[@scheme='RegNr']"/>
-                </td>
-            </tr>
-            <p> </p>
+                </fo:block>
+            </fo:table-cell>
+            </fo:table-row>
         </xsl:if>
+        <fo:table-row>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td1">
+                <fo:block></fo:block>
+            </fo:table-cell>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td2">
+                <fo:block></fo:block>
+            </fo:table-cell>
+            <fo:table-cell xsl:use-attribute-sets="table.data.td3">
+                <fo:block></fo:block>
+            </fo:table-cell>
+        </fo:table-row>
     </xsl:template>
+
+
+
 </xsl:stylesheet>
 
 
