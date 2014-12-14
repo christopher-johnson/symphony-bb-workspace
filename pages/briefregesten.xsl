@@ -53,6 +53,9 @@
                              </fo:list-item-body>
                          </fo:list-item>
                      </fo:list-block>
+                     <fo:block font-size="9pt" text-align="outside">
+                        <fo:page-number/>
+                     </fo:block>
                  </fo:static-content>
                    <fo:flow flow-name="xsl-region-body">
                        <fo:block xsl:use-attribute-sets="h4">
@@ -88,47 +91,10 @@
    </xsl:template>
 
     <xsl:template match="node()" mode="brdata" priority="2.5">
-            <xsl:if test="./t:publicationStmt/t:date != ''">
-        <fo:table-row>
-            <fo:table-cell xsl:use-attribute-sets="table.data.td1">
-                <fo:block>
-                    File
-                </fo:block>
-            </fo:table-cell>
-
-                <fo:table-cell xsl:use-attribute-sets="table.data.td2">
-                    <fo:block>
-            Date:
-                    </fo:block>
-                </fo:table-cell>
-            <fo:table-cell xsl:use-attribute-sets="table.data.td3">
-                <fo:block>
-                 <xsl:value-of select="./t:publicationStmt/t:date"/>
-                </fo:block>
-            </fo:table-cell>
-                </fo:table-row>
-        </xsl:if>
-        <xsl:if test="./t:publicationStmt/t:pubPlace != ''">
+         <xsl:if test="./t:titleStmt/t:author/t:persName != ''">
             <fo:table-row>
             <fo:table-cell xsl:use-attribute-sets="table.data.td1">
-                <fo:block></fo:block>
-            </fo:table-cell>
-            <fo:table-cell xsl:use-attribute-sets="table.data.td2">
-                <fo:block>
-                    Place:
-                </fo:block>
-            </fo:table-cell>
-            <fo:table-cell xsl:use-attribute-sets="table.data.td3">
-                <fo:block>
-                    <xsl:value-of select="./t:publicationStmt/t:pubPlace"/>
-                </fo:block>
-            </fo:table-cell>
-            </fo:table-row>
-        </xsl:if>
-        <xsl:if test="./t:titleStmt/t:author/t:persName != ''">
-            <fo:table-row>
-            <fo:table-cell xsl:use-attribute-sets="table.data.td1">
-                <fo:block></fo:block>
+                <fo:block>TitleStmt</fo:block>
             </fo:table-cell>
             <fo:table-cell xsl:use-attribute-sets="table.data.td2">
                 <fo:block>
@@ -159,11 +125,30 @@
                 </fo:table-cell>
             </fo:table-row>
         </xsl:if>
+        <xsl:if test="./t:publicationStmt/t:idno/t:idno[@type='URLXML'] != ''">
+            <fo:table-row>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td1">
+                    <fo:block>
+                        PubStmt
+                    </fo:block>
+                </fo:table-cell>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td2">
+                    <fo:block>
+                        URLXML:
+                    </fo:block>
+                </fo:table-cell>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td3">
+                    <fo:block>
+                        <xsl:value-of select="./t:publicationStmt/t:idno/t:idno[@type='URLXML']"/>
+                    </fo:block>
+                </fo:table-cell>
+            </fo:table-row>
+        </xsl:if>
         <xsl:if test="./t:seriesStmt/t:biblScope != ''">
             <fo:table-row>
             <fo:table-cell xsl:use-attribute-sets="table.data.td1">
                 <fo:block>
-                Series
+                SeriesStmt
                 </fo:block>
             </fo:table-cell>
             <fo:table-cell xsl:use-attribute-sets="table.data.td2">
@@ -182,21 +167,38 @@
             <fo:table-row>
                 <fo:table-cell xsl:use-attribute-sets="table.data.td1">
                     <fo:block>
-                        Notes
+                        NotesStmt
                     </fo:block>
                 </fo:table-cell>
-                <xsl:if test="./t:notesStmt/t:note/t:rs[@type='object'] != ''">
+                <xsl:if test="./t:notesStmt/t:note != ''">
                     <fo:table-cell xsl:use-attribute-sets="table.data.td2">
                         <fo:block>
-                            Obj:
+                           Note:
                         </fo:block>
                     </fo:table-cell>
                     <fo:table-cell xsl:use-attribute-sets="table.data.td3">
                         <fo:block>
-                            <xsl:value-of select="./t:notesStmt/t:note/t:rs[@type='object']"/>
+                            <xsl:value-of select="./t:notesStmt/t:note"/>
                         </fo:block>
                     </fo:table-cell>
                 </xsl:if>
+            </fo:table-row>
+        </xsl:if>
+        <xsl:if test="./t:notesStmt/t:note/t:rs[@type='object'] != ''">
+            <fo:table-row>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td1">
+                    <fo:block></fo:block>
+                </fo:table-cell>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td2">
+                    <fo:block>
+                        Object:
+                    </fo:block>
+                </fo:table-cell>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td3">
+                    <fo:block>
+                        <xsl:value-of select="./t:notesStmt/t:note/t:rs[@type='object']"/>
+                    </fo:block>
+                </fo:table-cell>
             </fo:table-row>
         </xsl:if>
         <xsl:if test="./t:notesStmt/t:note/t:rs[@type='bibl'] != ''">
@@ -215,6 +217,23 @@
                 </fo:block>
             </fo:table-cell>
              </fo:table-row>
+        </xsl:if>
+        <xsl:if test="./t:notesStmt/t:note/t:rs[@type='lz'] != ''">
+            <fo:table-row>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td1">
+                    <fo:block></fo:block>
+                </fo:table-cell>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td2">
+                    <fo:block>
+                        Lit:
+                    </fo:block>
+                </fo:table-cell>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td3">
+                    <fo:block>
+                        <xsl:value-of select="./t:notesStmt/t:note/t:rs[@type='lz']"/>
+                    </fo:block>
+                </fo:table-cell>
+            </fo:table-row>
         </xsl:if>
            <xsl:if test="./t:notesStmt/t:note/t:ref/@target != ''">
             <fo:table-row>
@@ -250,16 +269,84 @@
             </fo:table-cell>
             </fo:table-row>
         </xsl:if>
-        <xsl:if test="./t:sourceDesc/t:biblFull/t:titleStmt/t:title != ''">
+        <xsl:if test="./t:sourceDesc/t:listEvent/t:event[@type='iso-origin']">
             <fo:table-row>
                 <fo:table-cell xsl:use-attribute-sets="table.data.td1">
                     <fo:block>
-                        Source
+                        SourceStmt
                     </fo:block>
                 </fo:table-cell>
                 <fo:table-cell xsl:use-attribute-sets="table.data.td2">
                     <fo:block>
-                        Title:
+                        Event Date:
+                    </fo:block>
+                </fo:table-cell>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td3">
+                    <fo:block>
+                          <xsl:value-of select="./t:sourceDesc/t:listEvent/t:event[@type='iso-origin']/@when"/>
+                    </fo:block>
+                </fo:table-cell>
+            </fo:table-row>
+        </xsl:if>
+        <xsl:if test="./t:sourceDesc/t:listEvent/t:event[@type='julian-origin']" >
+            <fo:table-row>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td1">
+                    <fo:block></fo:block>
+                </fo:table-cell>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td2">
+                    <fo:block>
+                        Julian Date:
+                    </fo:block>
+                </fo:table-cell>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td3">
+                    <fo:block>
+                         <xsl:value-of select="./t:sourceDesc/t:listEvent/t:event[@type='julian-origin']/@when"/>
+                    </fo:block>
+                </fo:table-cell>
+            </fo:table-row>
+        </xsl:if>
+        <xsl:if test="./t:sourceDesc/t:listEvent/t:event/t:label != ''">
+            <fo:table-row>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td1">
+                    <fo:block></fo:block>
+                </fo:table-cell>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td2">
+                    <fo:block>
+                        Date Label:
+                    </fo:block>
+                </fo:table-cell>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td3">
+                    <fo:block>
+                          <xsl:value-of select="./t:sourceDesc/t:listEvent/t:event/t:label"/>
+                    </fo:block>
+                </fo:table-cell>
+            </fo:table-row>
+        </xsl:if>
+        <xsl:if test="./t:sourceDesc/t:listPlace/t:place/t:placeName != ''">
+            <fo:table-row>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td1">
+                    <fo:block></fo:block>
+                </fo:table-cell>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td2">
+                    <fo:block>
+                        Event Place:
+                    </fo:block>
+                </fo:table-cell>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td3">
+                    <fo:block>
+                        <xsl:value-of select="./t:sourceDesc/t:listPlace/t:place/t:placeName"/>
+                    </fo:block>
+                </fo:table-cell>
+            </fo:table-row>
+        </xsl:if>
+        <xsl:if test="./t:sourceDesc/t:biblFull/t:titleStmt/t:title != ''">
+            <fo:table-row>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td1">
+                    <fo:block></fo:block>
+                </fo:table-cell>
+                <fo:table-cell xsl:use-attribute-sets="table.data.td2">
+                    <fo:block>
+                        Source:
                     </fo:block>
                 </fo:table-cell>
                 <fo:table-cell xsl:use-attribute-sets="table.data.td3">
@@ -273,7 +360,7 @@
             <fo:table-row>
             <fo:table-cell xsl:use-attribute-sets="table.data.td1">
                 <fo:block>
-                    Profile
+                    ProfileStmt
                 </fo:block>
             </fo:table-cell>
             <fo:table-cell xsl:use-attribute-sets="table.data.td2">
@@ -311,7 +398,7 @@
         </fo:table-row>
         </xsl:if>
         </xsl:template>
-</xsl:stylesheet>
+ </xsl:stylesheet>
 
 
 

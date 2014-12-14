@@ -26,7 +26,7 @@ class datasourcebriefregesten_addressee extends RemoteDatasource {
                 'website' => 'http://localhost',
                 'email' => 'christopher.johnson@wikimedia.de'),
             'version' => 'Symphony 2.5.2',
-            'release-date' => '2014-12-08T15:35:47+00:00'
+            'release-date' => '2014-12-14T14:23:54+00:00'
         );
     }
 
