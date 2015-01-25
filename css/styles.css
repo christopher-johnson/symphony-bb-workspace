@@ -24,7 +24,7 @@ body {
 #content {
 	background: url("../images/border.gif") 0 0 no-repeat;
 	padding: 30px;
-    word-break:break-all;
+    word-break:normal;
 }
 
 /******* Links *******/
